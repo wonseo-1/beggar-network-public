@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-07-04T16:04:03.081Z",
+  "cities": [
+    {
+      "city": "nyc",
+      "count": 258
+    },
+    {
+      "city": "la",
+      "count": 19
+    }
+  ]
+}

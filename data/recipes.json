@@ -1,0 +1,434 @@
+{
+  "_meta": {
+    "affiliate_tag": "TODO-REGISTER-AMAZON-ASSOCIATES",
+    "schema_version": "3.0",
+    "notes": "Schema v3: ingredients have unit/qty for servings scaling. Steps have timer_seconds for cook mode."
+  },
+
+  "series": {
+    "beggar_original": {
+      "label": "Beggar Original",
+      "emoji": "👑",
+      "description": "Mashups and inventions you won't find anywhere else"
+    },
+    "restaurant_to_home": {
+      "label": "Restaurant → Home",
+      "emoji": "🗽",
+      "description": "Cap that overpriced restaurant dish — make it at home"
+    }
+  },
+
+  "recipes": [
+    {
+      "id": "dubai-mochi",
+      "name": "Dubai Chocolate Mochi",
+      "slug": "dubai-chocolate-mochi",
+      "series": "beggar_original",
+      "tagline": "Two viral hits in one — Dubai's $18 chocolate bar meets the rice paper mochi trend. $5 to make, healthier than original.",
+      "emoji": "🍫",
+      "image": null,
+      "tags": ["viral", "dessert", "no-bake", "high-protein", "frozen", "beggar-original"],
+      "prep_time_min": 15,
+      "cook_time_min": 0,
+      "total_time_min": 15,
+      "freeze_time_min": 60,
+      "difficulty": "easy",
+      "base_servings": 8,
+      "calories_per_serving": 280,
+      "macros_per_serving": {
+        "protein_g": 8,
+        "carbs_g": 24,
+        "fat_g": 18
+      },
+      "restaurant_price": {
+        "amount": 18,
+        "where": "FiX Dessert Chocolatier (Dubai) · Lady M (NYC)",
+        "context": "The viral $18 Dubai chocolate bar by FiX. Lady M's pistachio version is similar."
+      },
+      "home_price": {
+        "amount_low": 1,
+        "amount_high": 3,
+        "unit": "per mochi",
+        "first_batch_total": 20,
+        "first_batch_note": "~$20 first time (extras last 4+ batches)",
+        "savings_pct_low": 83,
+        "savings_pct_high": 94
+      },
+      "why_this_works": "Combines two viral foodtok trends: Dubai's $18 pistachio chocolate bar and the rice paper mochi hack. Uses pre-toasted kataifi (skip 7 min of toasting) and a drizzle instead of full chocolate coating — much easier than the original recipe. Greek yogurt base means higher protein, lower sugar, 70% cheaper.",
+      "ingredients": [
+        {
+          "id": "ing_rice_paper",
+          "name": "Rice paper sheets",
+          "qty": 8,
+          "unit": "sheets",
+          "type": "pantry",
+          "amazon_search": "vietnamese rice paper spring roll wrappers",
+          "asin": null,
+          "note": "Round, about 8.5 inch (22cm) diameter"
+        },
+        {
+          "id": "ing_kataifi",
+          "name": "Toasted kataifi (pre-roasted)",
+          "qty": 1,
+          "unit": "cup",
+          "type": "pantry",
+          "amazon_search": "toasted kataifi pre-roasted dubai chocolate",
+          "asin": null,
+          "note": "Buy pre-toasted to save 7 minutes. Brands like Eastanbul, Moosh, Ceres."
+        },
+        {
+          "id": "ing_pistachio",
+          "name": "Pistachio cream",
+          "qty": 0.5,
+          "unit": "cup",
+          "type": "pantry",
+          "amazon_search": "pistachio cream spread dubai chocolate",
+          "asin": null,
+          "note": "100% pistachio preferred, no palm oil"
+        },
+        {
+          "id": "ing_butter",
+          "name": "Butter (melted)",
+          "qty": 1,
+          "unit": "tbsp",
+          "type": "fresh",
+          "amazon_search": "unsalted butter",
+          "asin": null,
+          "note": "Optional — for richer filling"
+        },
+        {
+          "id": "ing_yogurt",
+          "name": "Greek yogurt (full fat)",
+          "qty": 1,
+          "unit": "cup",
+          "type": "fresh",
+          "amazon_search": "fage greek yogurt full fat 5 percent",
+          "asin": null,
+          "note": "FULL FAT only — low-fat ruins texture"
+        },
+        {
+          "id": "ing_chocolate",
+          "name": "Dark chocolate (70%+)",
+          "qty": 100,
+          "unit": "g",
+          "type": "pantry",
+          "amazon_search": "dark chocolate bar 70 percent ghirardelli",
+          "asin": null,
+          "note": "Half goes in filling, half for drizzle"
+        }
+      ],
+      "tools": [],
+      "instructions": [
+        {
+          "id": "step_1",
+          "title": "Make the filling",
+          "content": "Melt 50g chocolate (microwave 30 sec, stir, repeat if needed). Mix in a bowl: 1 cup toasted kataifi + 1/2 cup pistachio cream + 1 tbsp melted butter + the melted chocolate. Stir until evenly coated. Save the remaining 50g chocolate for drizzling later.",
+          "timer_seconds": null,
+          "uses_ingredients": ["ing_kataifi", "ing_pistachio", "ing_butter", "ing_chocolate"]
+        },
+        {
+          "id": "step_2",
+          "title": "Prep your station",
+          "content": "Set up: a bowl of cold water, a wet plate or damp towel, the filling, greek yogurt, and a tray lined with parchment paper. You'll work fast — rice paper softens in seconds.",
+          "timer_seconds": null,
+          "uses_ingredients": []
+        },
+        {
+          "id": "step_3",
+          "title": "Wrap each mochi",
+          "content": "Dip one rice paper sheet in cold water for exactly 3 seconds. Lay flat. Don't worry if it still feels firm — it keeps softening. Add 2 tbsp greek yogurt in center, then top with 1 tbsp filling. Fold all four sides over the filling, then flip seam-side down. Should look like a small dumpling pouch. Place on parchment. Repeat for all 8 sheets.",
+          "timer_seconds": null,
+          "uses_ingredients": ["ing_rice_paper", "ing_yogurt"]
+        },
+        {
+          "id": "step_4",
+          "title": "Drizzle chocolate (optional)",
+          "content": "Melt the remaining 50g chocolate. Use a spoon or fork to drizzle thin stripes across each mochi. Don't fully cover — drizzling is faster than dipping and looks more pro. Skip this step entirely if you want the simplest version.",
+          "timer_seconds": null,
+          "uses_ingredients": ["ing_chocolate"]
+        },
+        {
+          "id": "step_5",
+          "title": "Freeze and serve",
+          "content": "Freeze on parchment for 1 hour minimum. Serve cold straight from freezer — texture is best within 5 minutes of removing.",
+          "timer_seconds": 3600,
+          "uses_ingredients": []
+        }
+      ],
+      "pro_tips": [
+        "Buy pre-toasted kataifi. Toasting from raw takes 7 minutes and is easy to burn. Pre-toasted is sold on Amazon — search 'toasted kataifi'.",
+        "Full-fat greek yogurt is non-negotiable. Low-fat versions release water and ruin the chewy texture.",
+        "Don't oversoak rice paper. 3 seconds in cold water is plenty — it keeps softening on the plate.",
+        "Drizzling chocolate is much easier than coating. Use a fork dipped in melted chocolate, then flick across the mochi.",
+        "Eat within 24 hours of freezing for best texture. Rice paper gets too hard if frozen longer."
+      ],
+      "variations": [
+        {
+          "name": "Strawberry Dubai Mochi",
+          "change": "Add 1 diced strawberry to filling per mochi. Adds tartness."
+        },
+        {
+          "name": "Nutella Mochi",
+          "change": "Swap pistachio cream for Nutella. Different flavor, same technique."
+        },
+        {
+          "name": "Salted Caramel",
+          "change": "Sprinkle flaky sea salt on chocolate while wet. Salted Dubai vibe."
+        },
+        {
+          "name": "Lower Calorie",
+          "change": "Use 2 oz chocolate instead of 100g. Drop to ~190 cal/serving."
+        }
+      ],
+      "videos": [
+        {
+          "platform": "tiktok",
+          "url": "https://www.tiktok.com/@catherine.desserts/video/7421492350473473287",
+          "creator": "@catherine.desserts",
+          "title": "Dubai mochi - 45K likes",
+          "is_featured": true
+        },
+        {
+          "platform": "youtube",
+          "url_search": "dubai chocolate mochi rice paper recipe",
+          "creator": null,
+          "title": "Tutorials on YouTube"
+        },
+        {
+          "platform": "tiktok",
+          "url_search": "dubai chocolate mochi",
+          "creator": null,
+          "title": "More on TikTok"
+        }
+      ],
+      "background": "The Dubai chocolate bar by FiX Dessert Chocolatier went viral on TikTok in late 2023, with one creator's 74M-view video pushing the $18 bar into global fame. The bar features pistachio cream and crispy kataifi (shredded phyllo) inside chocolate. Meanwhile, the rice paper mochi hack — wrapping frozen yogurt/fillings in softened rice paper — became its own trend in 2024-2025. This recipe combines both for a homemade version that costs $5 and adds protein from greek yogurt.",
+      "related_spots": []
+    },
+
+    {
+      "id": "chipotle-bowl",
+      "name": "Chipotle Burrito Bowl",
+      "slug": "chipotle-burrito-bowl",
+      "series": "restaurant_to_home",
+      "tagline": "The secret is the sauce. Make 4 bowls for the price of 1 at Chipotle. Smoky chipotle crema does the heavy lifting.",
+      "emoji": "🌯",
+      "image": null,
+      "tags": ["viral", "lunch", "meal-prep", "high-protein", "restaurant-to-home"],
+      "prep_time_min": 10,
+      "cook_time_min": 25,
+      "total_time_min": 35,
+      "marinate_time_min": 30,
+      "difficulty": "easy",
+      "base_servings": 4,
+      "calories_per_serving": 540,
+      "macros_per_serving": {
+        "protein_g": 38,
+        "carbs_g": 52,
+        "fat_g": 18
+      },
+      "restaurant_price": {
+        "amount": 14,
+        "where": "Chipotle (30+ NYC locations)",
+        "context": "Chicken bowl with guacamole. Lunch standard in every business district."
+      },
+      "home_price": {
+        "amount_low": 6,
+        "amount_high": 9,
+        "unit": "per serving",
+        "first_batch_total": 37,
+        "first_batch_note": "~$37 first time (sauce ingredients last 4 batches)",
+        "savings_pct_low": 36,
+        "savings_pct_high": 57
+      },
+      "why_this_works": "The real Chipotle secret is the smoky chipotle crema (greek yogurt + adobo sauce + lime). Make it once, use it all week — on bowls, tacos, eggs, anything. Everything else is just store-bought shortcuts: Ben's Ready Rice (90 sec), canned beans (1 min), pre-made guac. The sauce is what makes it taste like Chipotle.",
+      "ingredients": [
+        {
+          "id": "ing_chicken",
+          "name": "Chicken thighs (boneless skinless)",
+          "qty": 1.5,
+          "unit": "lb",
+          "type": "fresh",
+          "amazon_search": "boneless skinless chicken thighs",
+          "asin": null,
+          "note": "Thighs > breast for this. Chipotle uses thighs."
+        },
+        {
+          "id": "ing_marinade",
+          "name": "Chipotle marinade",
+          "qty": 1,
+          "unit": "packet",
+          "type": "pantry",
+          "amazon_search": "mccormick grill mates chipotle pepper marinade",
+          "asin": null,
+          "note": "McCormick Grill Mates Chipotle Pepper — saves the spice measuring"
+        },
+        {
+          "id": "ing_yogurt",
+          "name": "Greek yogurt (full fat)",
+          "qty": 1,
+          "unit": "cup",
+          "type": "fresh",
+          "amazon_search": "fage greek yogurt full fat 5 percent",
+          "asin": null,
+          "note": "This becomes the secret sauce base"
+        },
+        {
+          "id": "ing_adobo",
+          "name": "Chipotle peppers in adobo sauce",
+          "qty": 1,
+          "unit": "can",
+          "type": "pantry",
+          "amazon_search": "la costena chipotle peppers in adobo sauce",
+          "asin": null,
+          "note": "THE MVP. One can = 8 batches of sauce. Lasts months in fridge."
+        },
+        {
+          "id": "ing_lime",
+          "name": "Lime",
+          "qty": 2,
+          "unit": "limes",
+          "type": "fresh",
+          "amazon_search": "fresh limes",
+          "asin": null,
+          "note": "Fresh lime juice — don't use bottled"
+        },
+        {
+          "id": "ing_rice",
+          "name": "Ready Rice Cilantro Lime",
+          "qty": 2,
+          "unit": "pouches",
+          "type": "pantry",
+          "amazon_search": "uncle bens ready rice cilantro lime",
+          "asin": null,
+          "note": "90 seconds in microwave. No actual cooking needed."
+        },
+        {
+          "id": "ing_beans",
+          "name": "Black beans (canned)",
+          "qty": 1,
+          "unit": "can",
+          "type": "pantry",
+          "amazon_search": "goya black beans low sodium canned",
+          "asin": null,
+          "note": "Goya or any low-sodium brand. Drain and rinse."
+        },
+        {
+          "id": "ing_guac",
+          "name": "Pre-made guacamole",
+          "qty": 1,
+          "unit": "container",
+          "type": "fresh",
+          "amazon_search": "wholly guacamole 100 percent avocado classic",
+          "asin": null,
+          "note": "Wholly Guacamole. Skip making your own."
+        },
+        {
+          "id": "ing_salsa",
+          "name": "Salsa or pico de gallo",
+          "qty": 1,
+          "unit": "cup",
+          "type": "fresh",
+          "amazon_search": "fresh pico de gallo salsa",
+          "asin": null,
+          "note": "Any tomato salsa. Or get the corn salsa for that Chipotle vibe."
+        },
+        {
+          "id": "ing_honey",
+          "name": "Honey",
+          "qty": 1,
+          "unit": "tbsp",
+          "type": "pantry",
+          "amazon_search": "raw honey",
+          "asin": null,
+          "note": "Goes in the sauce. Most kitchens already have it."
+        }
+      ],
+      "tools": [],
+      "instructions": [
+        {
+          "id": "step_1",
+          "title": "Make THE SAUCE (the secret weapon)",
+          "content": "In a blender or bowl: 1 cup greek yogurt + 3 chipotle peppers (from the can, with sauce) + juice of 1 lime + 1 tbsp honey + 1/2 tsp salt. Blend or whisk until smooth. Done. This sauce lasts 5 days in fridge and makes EVERYTHING taste like Chipotle. Tacos, eggs, sandwiches, anything.",
+          "timer_seconds": null,
+          "uses_ingredients": ["ing_yogurt", "ing_adobo", "ing_lime", "ing_honey"]
+        },
+        {
+          "id": "step_2",
+          "title": "Marinate the chicken",
+          "content": "Cut chicken thighs into bite-sized pieces. In a bowl: chicken + McCormick chipotle marinade packet + juice of 1 lime + 2 tbsp olive oil. Toss to coat. Let sit 30 minutes (or overnight in fridge for stronger flavor).",
+          "timer_seconds": 1800,
+          "uses_ingredients": ["ing_chicken", "ing_marinade", "ing_lime"]
+        },
+        {
+          "id": "step_3",
+          "title": "Cook the chicken",
+          "content": "Heat a pan or skillet medium-high. Add marinated chicken in a single layer. Cook 4 minutes, flip, cook 3-4 more minutes until charred edges and cooked through (165°F internal). Set aside.",
+          "timer_seconds": 480,
+          "uses_ingredients": []
+        },
+        {
+          "id": "step_4",
+          "title": "Heat the base (90 seconds)",
+          "content": "Microwave 2 pouches of Ben's Ready Rice Cilantro Lime per package (usually 90 seconds). Drain and rinse black beans, then microwave for 1 minute in a bowl with a pinch of salt and cumin.",
+          "timer_seconds": 90,
+          "uses_ingredients": ["ing_rice", "ing_beans"]
+        },
+        {
+          "id": "step_5",
+          "title": "Assemble 4 bowls",
+          "content": "Divide into 4 bowls: rice → beans → chicken → spoonful of guacamole → salsa → DRIZZLE THE SAUCE GENEROUSLY. The sauce is the move. Don't be shy with it.",
+          "timer_seconds": null,
+          "uses_ingredients": ["ing_guac", "ing_salsa"]
+        }
+      ],
+      "pro_tips": [
+        "Make a double batch of the sauce. You'll use it on everything for the next 5 days — eggs, tacos, sandwiches, grilled veggies. This is the real win.",
+        "💡 Even faster: Skip steps 2-3 — grab a rotisserie chicken on the way home, shred it, toss with the marinade. 5 minutes total.",
+        "Buy 1 can of chipotle peppers in adobo. Freeze leftover peppers in an ice cube tray with their sauce. One cube = one sauce batch.",
+        "Chicken thighs > breast for this. Stays juicy even after meal prep.",
+        "For corn salsa vibes (real Chipotle): mix frozen sweet corn + lime + cilantro + diced red onion."
+      ],
+      "variations": [
+        {
+          "name": "Vegetarian Bowl",
+          "change": "Swap chicken for sofritas-style tofu or extra beans. Sauce makes anything taste good."
+        },
+        {
+          "name": "Steak Bowl",
+          "change": "Sub chicken for flank steak strips. Marinate same way. Cook hotter and faster."
+        },
+        {
+          "name": "Low-Carb",
+          "change": "Skip the rice, double the beans. Add cauliflower rice underneath."
+        },
+        {
+          "name": "Burrito version",
+          "change": "Wrap everything in a large flour tortilla instead of bowl. Toast the wrap for 30 sec on each side."
+        }
+      ],
+      "videos": [
+        {
+          "platform": "tiktok",
+          "url": "https://www.tiktok.com/@thatsavagekitchen/video/7513265050681904415",
+          "creator": "@thatsavagekitchen",
+          "title": "Chipotle bowl meal prep - 95K likes",
+          "is_featured": true
+        },
+        {
+          "platform": "youtube",
+          "url_search": "chipotle copycat burrito bowl secret sauce",
+          "creator": null,
+          "title": "Copycat tutorials on YouTube"
+        },
+        {
+          "platform": "tiktok",
+          "url_search": "chipotle copycat sauce greek yogurt",
+          "creator": null,
+          "title": "Sauce hacks on TikTok"
+        }
+      ],
+      "background": "Chipotle's lunch bowl runs $11-14 in NYC, and lines wrap around the block at noon. The real secret isn't the rice or beans — it's the chipotle crema some locations add. TikTok creators like @thatsavagekitchen (95K+ likes) cracked the code: greek yogurt + chipotle peppers in adobo + lime + honey. Make it once, use it all week. One can of chipotle peppers ($3) makes 8 batches of sauce. That's how 4 bowls cost the price of one Chipotle bowl.",
+      "related_spots": ["chipotle"]
+    }
+  ]
+}

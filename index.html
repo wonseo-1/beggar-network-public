@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Beggar Network — Foodipedia for cheap eats</title>
+  <meta name="description" content="A wiki of cheap eats verified by locals. All under $14.">
+  <meta name="theme-color" content="#FF6B35">
+
+  <!-- Canonical / OG — update SITE_URL when a custom domain is connected -->
+  <link rel="canonical" href="https://beggarnetwork.vercel.app/">
+  <meta property="og:site_name" content="Beggar Network">
+  <meta property="og:title" content="Beggar Network — Foodipedia for cheap eats">
+  <meta property="og:description" content="A wiki of cheap eats verified by locals. All under $14.">
+  <meta property="og:image" content="https://beggarnetwork.vercel.app/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://beggarnetwork.vercel.app/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beggar Network — Foodipedia for cheap eats">
+  <meta name="twitter:description" content="A wiki of cheap eats verified by locals. All under $14.">
+  <meta name="twitter:image" content="https://beggarnetwork.vercel.app/assets/og-image.png">
+
+  <link rel="icon" href="assets/mascot-32.png">
+
+  <!-- MapLibre GL JS -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/recipe.css">
+</head>
+<body class="light">
+
+  <!-- ═══ HEADER (1 row, sticky top) ═══ -->
+  <header class="header">
+    <div class="header-left">
+      <a class="logo" href="/" aria-label="Beggar Network home">
+        <img class="logo__mascot" src="assets/mascot-32.png" width="22" height="22" alt="">
+        <span class="logo__text"><em>Beggar</em> Network</span>
+      </a>
+      <div class="city-switch-wrap">
+        <button class="city-switch" id="citySwitchBtn" type="button" onclick="toggleCityMenu()" aria-haspopup="true">
+          <span id="citySwitchLabel">🗽 NYC</span><span class="city-switch__caret">▾</span>
+        </button>
+        <div class="city-menu" id="cityMenu" style="display:none"></div>
+      </div>
+      <span class="brand-tagline">Foodipedia for cheap eats — verified by locals, all under $14</span>
+      <nav class="type-tabs" id="typeBar" role="tablist" aria-label="Spot type">
+        <button class="type-tab is-active" data-type="all" role="tab" aria-selected="true">
+          <span class="type-tab__label">All</span>
+          <span class="type-tab__count" data-count="all">—</span>
+        </button>
+        <button class="type-tab" data-type="spot" role="tab" aria-selected="false">
+          <span class="type-tab__icon">🍴</span>
+          <span class="type-tab__label">Spots</span>
+          <span class="type-tab__count" data-count="spot">—</span>
+        </button>
+        <button class="type-tab" data-type="chain" role="tab" aria-selected="false">
+          <span class="type-tab__icon">⛓</span>
+          <span class="type-tab__label">Chains</span>
+          <span class="type-tab__count" data-count="chain">—</span>
+        </button>
+        <button class="type-tab" data-type="mart" role="tab" aria-selected="false">
+          <span class="type-tab__icon">🛒</span>
+          <span class="type-tab__label">Markets</span>
+          <span class="type-tab__count" data-count="mart">—</span>
+        </button>
+      </nav>
+    </div>
+    <div class="header-right">
+      <label class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M11 11l3 3M7 12.5A5.5 5.5 0 1 0 7 1.5a5.5 5.5 0 0 0 0 11Z"/></svg>
+        <input class="search-input" id="searchInput" type="text" placeholder="Search spots…" autocomplete="off" oninput="onSearchInput(this.value)">
+        <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Clear search">✕</button>
+      </label>
+
+      <button class="btn btn--ghost btn--sm filter-btn-mobile" onclick="openFilterModal()">Filter</button>
+
+      <div class="header-actions">
+        <button class="header-action" onclick="toggleRankingPanel()" title="Top cheap spots, cheapest first">
+          <img src="assets/throne.svg" width="14" height="14" alt="">
+          <span>Table</span>
+        </button>
+        <button class="header-action" onclick="toggleCourtPanel()" title="Help verify prices, earn Beggar Coins">
+          <img src="assets/gavel.svg" width="14" height="14" alt="">
+          <span>Judge</span>
+        </button>
+        <!-- Feed — hidden for now -->
+        <button class="header-action" onclick="openFeedPanel()" style="display:none">
+          <img src="assets/flame.svg" width="14" height="14" alt="">
+          <span>Feed</span>
+        </button>
+      </div>
+
+      <button class="btn btn--primary btn--sm" onclick="openSubmitModal()">
+        <span class="btn-plus">+</span><span class="btn-label"> Submit</span>
+      </button>
+      <div id="authArea"></div>
+    </div>
+  </header>
+
+  <!-- ═══ TICKER (intel / motto strip) ═══ -->
+  <div class="ticker" id="ticker" role="marquee" aria-label="Beggar Network intel">
+    <div class="ticker__track-wrap">
+      <div class="ticker__track" id="tickerTrack"></div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE (map + floating chrome + edge panels + bottom ad banner + ad rail) ═══ -->
+  <main class="stage" id="stage">
+
+    <!-- Tab: Map -->
+    <div id="tab-map" class="tab-content is-active">
+
+    <!-- Map -->
+    <div id="map" class="map"></div>
+
+    <!-- Floating: grade chips (top center) -->
+    <div class="grade-bar" id="gradeBar" role="tablist" aria-label="Price grade filter">
+      <button class="chip is-active" data-grade="all">All prices</button>
+      <button class="chip" data-grade="legend"><span class="chip__dot" style="background:#22C55E"></span> ≤$4</button>
+      <button class="chip" data-grade="solid"><span class="chip__dot" style="background:#3B82F6"></span> ≤$8</button>
+      <button class="chip" data-grade="fair"><span class="chip__dot" style="background:#EAB308"></span> ≤$11</button>
+      <button class="chip" data-grade="border"><span class="chip__dot" style="background:#EF4444"></span> ≤$14</button>
+    </div>
+
+    <!-- Floating: search this area (centered, below grade bar) -->
+    <div class="search-area-wrap" id="searchAreaWrap">
+      <button class="search-area-btn" id="searchAreaBtn" onclick="searchThisArea()">
+        <svg viewBox="0 0 14 14" width="12" height="12" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M7 1.5v2M7 10.5v2M1.5 7h2M10.5 7h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Show spots in this view
+      </button>
+    </div>
+
+    <!-- Floating: stats (bottom-left) -->
+    <div class="stats-badge" id="statsBadge"><strong>0</strong> spots · avg <strong>$0</strong></div>
+
+    <!-- ═══ VIEWPORT RANKING (👑 cheapest in view) ═══ -->
+    <div class="viewrank" id="viewRank" style="display:none"></div>
+
+    <!-- Floating: FABs (bottom-right) -->
+    <div class="fab-stack">
+      <!-- Feed FAB — hidden for now, re-enable when user base grows -->
+      <button class="fab fab--feed" onclick="openFeedPanel()" aria-label="Open activity feed" style="display:none">
+        <img class="fab__sprite" src="assets/flame.svg" width="14" height="14" alt="">
+        <span>Feed</span>
+      </button>
+      <button class="fab fab--accent" onclick="openVerifyQueue()" aria-label="Help verify prices">
+        <img class="fab__sprite" src="assets/gavel.svg" width="14" height="14" alt="">
+        <span>Judge</span>
+      </button>
+      <button class="fab" onclick="toggleRankingPanel()" aria-label="The Table">
+        <img class="fab__sprite" src="assets/throne.svg" width="14" height="14" alt="">
+        <span>Table</span>
+      </button>
+    </div>
+
+    <!-- ═══ LEFT PANEL — The Table (slides in) ═══ -->
+    <aside class="panel panel--left" id="panelLeft" aria-label="The Table — cheapest spots ranking">
+      <header class="panel__head">
+        <div class="panel__title">
+          <img class="panel__icon" src="assets/throne.svg" width="22" height="22" alt="">
+          <span>The Table</span>
+          <span class="panel-subtitle">Top cheap spots</span>
+        </div>
+        <div class="panel__sub" id="rankingCount">Cheapest first</div>
+        <button class="panel__close" onclick="toggleRankingPanel()" aria-label="Close The Table">✕</button>
+      </header>
+      <div class="panel__body">
+        <div class="ranking-list" id="rankingList"></div>
+      </div>
+    </aside>
+
+    <!-- ═══ RIGHT PANEL — Judge ═══ -->
+    <aside class="panel panel--right" id="panelRight" aria-label="Judge — price verification queue">
+      <header class="panel__head">
+        <div class="panel__title">
+          <img class="panel__icon" src="assets/gavel.svg" width="22" height="22" alt="">
+          <span>Judge</span>
+          <span class="panel-subtitle">Verify prices · earn coins</span>
+        </div>
+        <div class="panel__sub" id="courtSubtitle">Price verification queue</div>
+        <button class="panel__close" onclick="toggleCourtPanel()" aria-label="Close Judge">✕</button>
+      </header>
+      <div class="panel__body">
+        <div class="panel__section-label">Needs verification</div>
+        <div class="court-queue" id="courtQueue"><div class="court-empty">Loading…</div></div>
+        <div class="panel__section-label panel__section-label--divider">Recent verdicts</div>
+        <div class="court-verdicts" id="courtVerdicts"><div class="court-empty">Loading…</div></div>
+      </div>
+    </aside>
+
+    <!-- ═══ EDGE HANDLES — removed (panels now toggled from header) ═══ -->
+
+    <!-- ═══ FLOATING MASCOT (always visible; persona moment) ═══ -->
+    <div class="floating-mascot" id="floatingMascot" aria-hidden="true">
+      <img src="assets/mascot-128.png" width="56" height="56" alt="" style="image-rendering:pixelated">
+    </div>
+
+    <!-- ═══ MOBILE AD BANNER (320x50 above tab bar) ═══ -->
+    <div class="ad-mobile" id="adMobile">320 × 50 — ad space</div>
+
+
+    <!-- ═══ AD BANNER (bottom of stage; floating card) ═══ -->
+    <div class="ad-banner" id="adBanner" aria-label="Sponsor space">
+      <div class="ad-slot ad-slot--leader">
+        <span class="ad-slot__pixel"><img src="assets/coin.svg" width="16" height="16" alt=""></span>
+        <span class="ad-slot__label">SPONSOR THE NETWORK</span>
+        <span class="ad-slot__size">728 × 90 · your ad here</span>
+      </div>
+    </div>
+
+    <!-- ═══ AD RAIL (right side; floating card overlay) ═══ -->
+    <aside class="ad-rail" id="adRail" aria-label="Sponsor space">
+      <div class="ad-slot ad-slot--sky">
+        <div class="ad-slot__inner">
+          <img class="ad-slot__mascot" src="assets/mascot-128.png" width="64" height="64" alt="" style="image-rendering:pixelated">
+          <div class="ad-slot__label">SPONSOR<br>THE NETWORK</div>
+          <div class="ad-slot__size">300 × 600</div>
+          <div class="ad-slot__copy">Your ad in front of the hungriest locals.</div>
+        </div>
+      </div>
+    </aside>
+
+    </div><!-- /#tab-map -->
+
+    <!-- Tab: Recipe -->
+    <div id="tab-recipe" class="tab-content" style="display:none"></div>
+
+    <!-- Tab: My -->
+    <div id="tab-my" class="tab-content" style="display:none">
+      <div class="coming-soon">
+        <div class="coming-soon-emoji">👤</div>
+        <h2>My Beggar Profile</h2>
+        <p>Your saved spots, votes, and verification streak.</p>
+        <p class="coming-soon-note">Your saved spots live on this device — no account needed.</p>
+      </div>
+    </div>
+
+  </main><!-- /.stage -->
+
+  <!-- ═══ APP TAB BAR (floating pill, 3 tabs — outside stage so always visible) ═══ -->
+  <nav class="app-tabs" id="appTabs" aria-label="Main navigation">
+    <button class="app-tab is-active" data-tab="map" onclick="switchTab('map')">
+      <span class="app-tab__icon">🗺️</span>
+      <span class="app-tab__label">Map</span>
+    </button>
+    <button class="app-tab" data-tab="recipe" onclick="switchTab('recipe')">
+      <span class="app-tab__icon">🍳</span>
+      <span class="app-tab__label">Recipe</span>
+    </button>
+    <button class="app-tab" data-tab="my" onclick="switchTab('my')">
+      <span class="app-tab__icon">👤</span>
+      <span class="app-tab__label">My</span>
+    </button>
+  </nav>
+
+  <!-- Hidden legacy elements (kept so existing JS doesn't break) -->
+  <div id="rankingPanel" style="display:none"></div>
+  <div id="courtPanel" style="display:none"></div>
+  <div class="ticker-bar" id="tickerBar" style="display:none"><div id="tickerTrack"></div></div>
+  <div class="price-filter" id="priceFilter" style="display:none">
+    <input type="range" class="price-slider" id="priceSlider" min="1" max="20" value="15" step="1" oninput="onPriceSlide(this.value)">
+    <span id="priceValue">$15</span>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading">
+    <div id="loading-mascot">
+      <img src="assets/mascot-128.png" width="96" height="96" alt="Beggar King" style="image-rendering:pixelated">
+    </div>
+    <div id="loading-msg">CONVENING THE BEGGARS…</div>
+  </div>
+
+  <!-- Side panel (spot detail) -->
+  <div class="side-panel" id="sidePanel">
+    <button class="detail-close" onclick="closeDetail()">✕</button>
+    <div class="detail-body" id="sidePanelBody"></div>
+  </div>
+
+  <!-- Detail overlay (behind floating card on mobile) -->
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeDetail()"></div>
+
+  <!-- Filter modal (mobile) -->
+  <div class="filter-modal" id="filterModal">
+    <div class="filter-card">
+      <div class="filter-header">
+        <h3>Filters</h3>
+        <button class="filter-close" onclick="closeFilterModal()">✕</button>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-label">Price</div>
+        <div class="filter-chips" id="filterGradeChips"></div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-label">Category</div>
+        <div class="filter-chips" id="filterCatChips"></div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-label">Type</div>
+        <div class="filter-chips" id="filterTypeChips"></div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="filter-reset-btn" onclick="resetFilters()">Reset</button>
+        <button class="filter-apply-btn" onclick="applyAndCloseFilter()">Apply (<span id="filterCount">0</span>)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit modal -->
+  <div class="modal-overlay" id="submitModal">
+    <div class="modal submit-modal">
+      <button class="modal-close" onclick="closeSubmitModal()">✕</button>
+      <div class="modal-title">
+        <span id="submitTitleIcon"></span>
+        Submit a Spot
+      </div>
+      <div class="submit-steps" id="submitSteps">
+        <span class="submit-step active" data-step="1"><span class="step-num">1</span><span class="step-label">Spot</span></span>
+        <span class="submit-step-line"></span>
+        <span class="submit-step" data-step="2"><span class="step-num">2</span><span class="step-label">Category</span></span>
+        <span class="submit-step-line"></span>
+        <span class="submit-step" data-step="3"><span class="step-num">3</span><span class="step-label">Menu</span></span>
+      </div>
+
+      <!-- ── Step 1: Nickname + Find Place ── -->
+      <div id="submitStep1">
+        <div class="form-group">
+          <label class="form-label">Your nickname</label>
+          <input class="form-input" id="subNickname" maxlength="24" placeholder="beggar_…">
+          <div class="form-hint">Auto-generated — change it if you want</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Paste Google Maps link</label>
+          <input class="form-input" id="subUrlInput"
+            placeholder="Paste a Google Maps link here..."
+            oninput="onUrlInput(this.value)"
+            onpaste="setTimeout(()=>onUrlInput(this.value),0)"
+            autocomplete="off">
+          <div id="urlStatus" class="submit-url-status" style="display:none"></div>
+          <p class="submit-help-text">Open Google Maps → Find the restaurant → Share → Copy link</p>
+        </div>
+        <div class="submit-preview" id="submitPreview" style="display:none">
+          <div class="submit-preview-name" id="previewName"></div>
+          <div class="submit-preview-address" id="previewAddress"></div>
+          <div id="submitChainNotice" class="submit-chain-notice" style="display:none"></div>
+          <div id="submitDupeNotice" class="submit-dupe-notice" style="display:none"></div>
+          <div id="submitDupeActions" class="submit-dupe-actions" style="display:none">
+            <p id="submitDupeText" class="submit-dupe-text"></p>
+            <button class="btn btn--primary btn--sm" onclick="switchToUpdateMode()">📋 Add / Update Menu</button>
+            <button class="btn btn--ghost btn--sm" id="submitNewBranchBtn" onclick="switchToNewBranch()" style="display:none">🏪 New Branch</button>
+            <button class="btn btn--ghost btn--sm" onclick="confirmNewSpot()">This is a different spot</button>
+          </div>
+        </div>
+        <button class="btn btn--primary" id="submitNext1" style="width:100%;margin-top:12px;" onclick="goToStep2()" disabled>Next →</button>
+      </div>
+
+      <!-- ── Step 2: Category + Tags ── -->
+      <div id="submitStep2" style="display:none">
+        <div class="submit-preview-mini">
+          <div class="submit-preview-name" id="step2Name"></div>
+          <div class="submit-preview-address" id="step2Address"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <div class="submit-cat-grid" id="subCatGrid"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tags <span class="form-hint-inline">(optional)</span></label>
+          <div class="submit-tag-grid" id="subTagGrid"></div>
+        </div>
+
+        <div class="submit-nav-row">
+          <button class="btn btn--ghost" onclick="backToStep1()">← Back</button>
+          <button class="btn btn--primary" id="submitNext2" onclick="goToStep3()" disabled>Next →</button>
+        </div>
+      </div>
+
+      <!-- ── Step 3: Photo + Menu + Submit ── -->
+      <div id="submitStep3" style="display:none">
+        <div class="submit-preview-mini">
+          <div class="submit-preview-name" id="step3Name"></div>
+        </div>
+
+        <div id="existingMenuDisplay" class="existing-menu-display" style="display:none"></div>
+
+        <div class="form-group" id="submitMenuSection">
+          <label class="form-label">Menu board photo</label>
+          <div class="submit-photo-drop" id="submitPhotoDrop" onclick="document.getElementById('submitPhotoInput').click()">
+            <input type="file" id="submitPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="onPhotoSelected(this)">
+            <div class="submit-photo-placeholder" id="submitPhotoPlaceholder">
+              <span style="font-size:32px">📸</span>
+              <div>Tap to take a photo or choose from gallery</div>
+            </div>
+            <img id="submitPhotoPreview" class="submit-photo-preview" style="display:none">
+          </div>
+          <div class="form-hint">We'll extract the menu for you — or add items manually below</div>
+        </div>
+
+        <div class="form-group" id="submitManualMenu">
+          <label class="form-label">Menu items <span class="form-hint-inline">(optional if photo uploaded)</span></label>
+          <div class="submit-menu-rows" id="menuRows"></div>
+          <button type="button" class="submit-add-btn" onclick="addMenuRow()">+ Add item</button>
+        </div>
+
+        <div class="submit-nav-row">
+          <button class="btn btn--ghost" onclick="backToStep2()">← Back</button>
+          <button class="btn btn--primary btn--submit" id="submitBtn" onclick="handleSubmit(event)">Submit for Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verify Queue panel -->
+  <div class="verify-panel-overlay" id="verifyPanel">
+    <div class="verify-panel">
+      <div class="verify-panel-header">
+        <div class="verify-panel-title">
+          <img src="assets/gavel.svg" width="20" height="20" alt="" style="vertical-align:-3px;margin-right:4px">
+          Help Verify Spots
+        </div>
+        <button class="verify-panel-close" onclick="closeVerifyQueue()">✕</button>
+      </div>
+      <div class="verify-panel-subtitle">These spots need a community price check. Tap one to view it on the map.</div>
+      <div id="verifyQueueList"><div class="verify-queue-empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- Feed overlay -->
+  <div class="feed-overlay" id="feedOverlay" onclick="if(event.target===this)closeFeedPanel()">
+    <div class="feed-panel">
+      <div class="feed-panel-header">
+        <div class="feed-panel-title">
+          <img src="assets/flame.svg" width="20" height="20" alt="" style="vertical-align:-3px;margin-right:4px">
+          Beggar Network
+        </div>
+        <button class="feed-panel-close" onclick="closeFeedPanel()">✕</button>
+      </div>
+      <div class="feed-panel-subtitle">Recent community activity near you</div>
+      <div class="feed-list" id="feedList"><div class="feed-empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Tweaks panel (shown when toolbar Tweaks toggle is on) -->
+  <div class="tweaks-panel" id="tweaksPanel" hidden></div>
+
+  <!-- Library load guard -->
+  <script>
+  (function checkDeps() {
+    const missing = [];
+    if (typeof maplibregl === 'undefined') missing.push('MapLibre GL JS');
+    if (typeof window.supabase === 'undefined') missing.push('Supabase');
+    if (missing.length === 0) return;
+    const msg = `라이브러리 로드 실패: ${missing.join(', ')}`;
+    document.body.innerHTML = `<div style="padding:24px;font-family:sans-serif;color:#222;white-space:pre-wrap;line-height:1.6">${msg}</div>`;
+    console.error('Missing libraries:', missing);
+  })();
+  </script>
+
+  <!-- Sprite data (production has full file; project ships stubs) -->
+  <script src="js/sprites-data.js"></script>
+  <script src="js/sprites.js"></script>
+
+  <!-- App scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/admin-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/markers.js"></script>
+  <script src="js/viewrank.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/detail.js"></script>
+  <script src="js/submit.js"></script>
+  <script src="js/panels.js"></script>
+
+  <!-- NEW: Tweaks panel -->
+  <script src="js/tweaks.js"></script>
+
+  <!-- Recipe tab -->
+  <script src="js/amazon.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/recipe.js"></script>
+
+
+  <!-- Boot -->
+  <script>
+    if (typeof ADS_ENABLED !== 'undefined' && !ADS_ENABLED) document.body.classList.add('ads-off');
+    initMap();
+  </script>
+
+</body>
+</html>

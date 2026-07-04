@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beggar Network Admin</title>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { overflow: auto; background: #f5f5f5; font-family: 'Inter', sans-serif; }
+
+    /* ── Admin Layout ── */
+    .admin-shell {
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+
+    .admin-topbar {
+      background: #1a1a1a; color: #fff;
+      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-brand {
+      font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px;
+    }
+    .admin-back-btn {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7);
+      text-decoration: none; padding: 7px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15); transition: all 0.15s;
+    }
+    .admin-back-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    .admin-body {
+      display: flex; flex: 1;
+    }
+
+    /* ── Sidebar Tabs ── */
+    .admin-sidebar {
+      width: 180px; flex-shrink: 0;
+      background: #fff; border-right: 1px solid #eee;
+      padding: 16px 0; position: sticky; top: 53px; align-self: flex-start; min-height: calc(100vh - 53px);
+    }
+    .admin-tab {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 11px 18px; background: none; border: none;
+      font-family: inherit; font-size: 13px; font-weight: 600; color: #555;
+      cursor: pointer; text-align: left; transition: all 0.15s;
+    }
+    .admin-tab:hover { background: #f9f9f9; color: #111; }
+    .admin-tab.active { background: rgba(255,107,53,0.08); color: #FF6B35; border-right: 3px solid #FF6B35; }
+
+    /* ── Content Area ── */
+    .admin-content-wrap {
+      flex: 1; padding: 24px; min-width: 0;
+    }
+    #adminContent { min-height: 200px; }
+
+    .admin-loading {
+      font-size: 14px; color: #aaa; padding: 24px 0;
+    }
+    .admin-empty {
+      font-size: 14px; color: #aaa; padding: 32px 0; text-align: center;
+    }
+
+    /* ── Table ── */
+    .admin-table-wrap {
+      overflow-x: auto; border-radius: 12px; border: 1px solid #eee;
+      background: #fff;
+    }
+    .admin-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    .admin-table th {
+      padding: 12px 14px; text-align: left; background: #fafafa;
+      font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.4px;
+      border-bottom: 1px solid #eee;
+    }
+    .admin-table td {
+      padding: 12px 14px; border-bottom: 1px solid #f5f5f5; vertical-align: middle;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #fafafa; }
+
+    .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
+    .admin-btn {
+      padding: 5px 11px; border-radius: 7px; border: none;
+      font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .admin-btn:hover { opacity: 0.8; }
+    .admin-btn-approve { background: #dcfce7; color: #16a34a; }
+    .admin-btn-reject  { background: #fee2e2; color: #dc2626; }
+
+    .report-type-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 6px;
+      font-size: 11px; font-weight: 700; background: #f0f0f0; color: #555;
+      text-transform: capitalize;
+    }
+
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;
+    }
+    .stats-card {
+      background: #fff; border-radius: 14px; border: 1px solid #eee;
+      padding: 18px 20px;
+    }
+    .stats-card-title {
+      font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.4px;
+      margin-bottom: 8px;
+    }
+    .stats-card-big {
+      font-size: 36px; font-weight: 900; color: #FF6B35; line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stats-card-breakdown { display: flex; flex-wrap: wrap; gap: 5px; }
+    .stat-pill {
+      font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px;
+    }
+    .stat-active   { background: #dcfce7; color: #16a34a; }
+    .stat-pending  { background: #fef9c3; color: #ca8a04; }
+    .stat-unverified { background: #f0f0f0; color: #666; }
+    .stat-excluded { background: #fee2e2; color: #dc2626; }
+
+    /* ── Toast ── */
+    #adminToast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 9999; background: #333; color: #fff;
+      padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    #adminToast.show { opacity: 1; }
+
+    @media (max-width: 640px) {
+      .admin-sidebar { width: 130px; }
+      .admin-tab { padding: 10px 12px; font-size: 12px; }
+      .admin-content-wrap { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-shell">
+  <!-- Top bar -->
+  <div class="admin-topbar">
+    <div class="admin-brand">🛡️ Beggar Network Admin</div>
+    <a class="admin-back-btn" href="/index.html">← Back to Map</a>
+  </div>
+
+  <div class="admin-body">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar">
+      <button class="admin-tab" data-tab="pending"       onclick="switchTab('pending')">📋 Pending Spots</button>
+      <button class="admin-tab" data-tab="prices"        onclick="switchTab('prices')">💰 Price Reports</button>
+      <button class="admin-tab" data-tab="reports"       onclick="switchTab('reports')">⚠️ All Reports</button>
+      <button class="admin-tab" data-tab="contributions" onclick="switchTab('contributions')">🤝 Contributions</button>
+      <button class="admin-tab" data-tab="pending_changes" onclick="switchTab('pending_changes')">🔍 Pending Changes</button>
+      <button class="admin-tab" data-tab="stats"         onclick="switchTab('stats')">📊 Stats</button>
+    </nav>
+
+    <!-- Content -->
+    <div class="admin-content-wrap">
+      <div id="adminContent">
+        <div class="admin-loading">Authenticating...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="adminToast"></div>
+
+<script src="js/admin-config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
