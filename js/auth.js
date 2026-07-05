@@ -34,7 +34,7 @@ function updateAuthUI() {
   if (currentUser) {
     // 로그인 상태(=관리자 본인)에게만 Admin 링크 + Sign out 노출
     const adminLink = isAdmin()
-      ? `<a class="admin-link-btn" href="/admin.html">🛡️ Admin</a>`
+      ? `<a class="admin-link-btn" href="admin.html">🛡️ Admin</a>`
       : '';
     el.innerHTML = `${adminLink}<button class="btn btn-glass btn-sm" onclick="signOut()">Sign out</button>`;
   } else {

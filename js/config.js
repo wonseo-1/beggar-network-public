@@ -1,8 +1,9 @@
 // ═══════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════
-// Mapbox token (kept for Geocoding API only — map tiles use MapLibre + OpenFreeMap)
-const MAPBOX_TOKEN = 'pk.eyJ1Ijoid29uc2VvIiwiYSI6ImNtcDBua3JxYjB5MG8ycXB1ZHdrYnRmY3QifQ.583rMzBKuqa1561e0Ui8jA';
+// Geocoding: Photon (Komoot, OSM data) — no API key needed.
+const PHOTON_URL = 'https://photon.komoot.io/api/';
+const PHOTON_REVERSE_URL = 'https://photon.komoot.io/reverse';
 
 const SUPABASE_URL = 'https://vzjbgdhsihjfhdwxxqwk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6amJnZGhzaWhqZmhkd3h4cXdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Nzc3MTIsImV4cCI6MjA5NDA1MzcxMn0.XchnQHREPiOppr4dpvzvxq06oFv2JXpBTeRTpyM7LzM';

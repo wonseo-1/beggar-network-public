@@ -29,7 +29,7 @@ function trackEvent(name, props) {
 async function loadRecipes() {
   if (window.RECIPES_DATA) return window.RECIPES_DATA;
   try {
-    const res = await fetch('/data/recipes.json');
+    const res = await fetch('data/recipes.json');
     window.RECIPES_DATA = await res.json();
     return window.RECIPES_DATA;
   } catch (e) {

@@ -143,7 +143,7 @@ async function loadData() {
   // - _legit/_cap 필드는 스냅샷 빌드 시점에 이미 집계되어 들어있다
   //   (build/generate-static.mjs의 buildMapSnapshot 참고).
   try {
-    const res = await fetch(`/data/api/v1/spots/${encodeURIComponent(currentCity)}.json`, { cache: 'no-store' });
+    const res = await fetch(`data/api/v1/spots/${encodeURIComponent(currentCity)}.json`, { cache: 'no-store' });
     if (!res.ok) throw new Error(`snapshot fetch failed: ${res.status}`);
     const json = await res.json();
     allRestaurants = json.spots || [];

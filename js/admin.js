@@ -14,7 +14,10 @@ try {
 }
 
 let adminUser = null;
-let activeTab = 'pending';
+// Wiki model (2026-07-05): no pre-publish approval gate anymore — new spots
+// go live immediately as 'unverified'. Admin's default job is now handling
+// reports (closed/price disputes), not gating new submissions.
+let activeTab = 'reports';
 
 // ═══════════════════════════════════
 // INIT
@@ -37,7 +40,7 @@ async function adminInit() {
   sb.auth.onAuthStateChange((_, s) => {
     if (!s) renderAdminSignIn();
   });
-  switchTab('pending');
+  switchTab('reports');
 }
 
 function renderAdminSignIn() {
@@ -96,7 +99,12 @@ function switchTab(tab) {
 }
 
 // ═══════════════════════════════════
-// TAB: PENDING SPOTS
+// TAB: PENDING SPOTS (legacy)
+// Wiki model (2026-07-05) removed the pre-publish gate — submit.js no longer
+// creates 'pending_review' rows. This tab only drains whatever was already
+// queued before the switch; once empty it stays empty. Kept as-is (not
+// deleted) so old rows aren't stranded. Full admin role rework is Phase 3
+// (see FEATURE-IDEAS.md § 위키피디아식 개편 계획).
 // ═══════════════════════════════════
 async function loadPendingSpots() {
   const content = document.getElementById('adminContent');

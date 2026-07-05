@@ -351,16 +351,15 @@ async function onUrlInput(val) {
     try {
       const query = encodeURIComponent(restaurant.name);
       const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json` +
-        `?access_token=${MAPBOX_TOKEN}&limit=1&types=poi,address`
+        `${PHOTON_URL}?q=${query}&limit=1`
       );
       const data = await res.json();
       if (data.features && data.features.length > 0) {
         const feat = data.features[0];
-        restaurant.lat = feat.center[1];
-        restaurant.lng = feat.center[0];
-        restaurant.address = feat.place_name || '';
-        // Use parsed name (from Google) over Mapbox name
+        restaurant.lat = feat.geometry.coordinates[1];
+        restaurant.lng = feat.geometry.coordinates[0];
+        restaurant.address = formatPhotonAddress(feat.properties);
+        // Use parsed name (from Google) over Photon name
       }
     } catch (_) {}
   }
@@ -385,12 +384,22 @@ async function onUrlInput(val) {
 async function reverseGeocode(lat, lng) {
   try {
     const res = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json` +
-      `?access_token=${MAPBOX_TOKEN}&limit=1`
+      `${PHOTON_REVERSE_URL}?lon=${lng}&lat=${lat}&limit=1`
     );
     const data = await res.json();
-    return data.features?.[0]?.place_name || `${lat}, ${lng}`;
+    const props = data.features?.[0]?.properties;
+    return props ? formatPhotonAddress(props) : `${lat}, ${lng}`;
   } catch (_) { return `${lat}, ${lng}`; }
+}
+
+// Photon returns structured properties (name/housenumber/street/city/state) —
+// Mapbox used to give a single ready-made `place_name` string. Build the
+// equivalent here so callers don't need to know the difference.
+function formatPhotonAddress(props) {
+  if (!props) return '';
+  const line1 = [props.housenumber, props.street].filter(Boolean).join(' ');
+  const parts = [line1 || props.name, props.city, props.state, props.country].filter(Boolean);
+  return parts.join(', ');
 }
 
 // ── Duplicate check ──────────────────────────────────────────────────────────
@@ -580,8 +589,9 @@ async function handleSubmit(e) {
     }
 
     // 2. Build restaurant row
-    // Has menu items → pending_review (admin approves), no menu → unverified
-    const hasMenu = menuItems.length > 0;
+    // Wiki model (2026-07-05): no pre-publish approval gate — everything
+    // goes live immediately as 'unverified' and earns trust through
+    // community verification counts (see FEATURE-IDEAS.md § 위키피디아식 개편 계획).
     const restRow = {
       name: _pendingRestaurant.name,
       address: _pendingRestaurant.address,
@@ -589,7 +599,7 @@ async function handleSubmit(e) {
       lng: _pendingRestaurant.lng,
       category: _selectedCategory,
       tags: _selectedTags.size > 0 ? Array.from(_selectedTags) : null,
-      status: hasMenu ? 'pending_review' : 'unverified',
+      status: 'unverified',
       submitted_nickname: nickname,
       city: (typeof detectCityFromCoords === 'function'
         && detectCityFromCoords(_pendingRestaurant.lat, _pendingRestaurant.lng)) || 'nyc',
